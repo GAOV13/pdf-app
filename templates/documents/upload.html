@@ -3,33 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Upload Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/document_module/upload.css') }}">
 </head>
 <body>
-    <h1>Upload Document</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.title.label }}<br>
-            {{ form.title(size=32) }}<br>
-            {% for error in form.title.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.description.label }}<br>
-            {{ form.description(rows=4, cols=40) }}<br>
-            {% for error in form.description.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.file.label }}<br>
-            {{ form.file }}<br>
-            {% for error in form.file.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p><input type="submit" value="Upload"></p>
-    </form>
+    <div class="container">
+        <h2>Upload Document</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.title.label }}<br>
+                {{ form.title(size=32, class_="form-control") }}<br>
+                {% for error in form.title.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.description.label }}<br>
+                {{ form.description(rows=4, cols=40, class_="form-control") }}<br>
+                {% for error in form.description.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.file.label }}<br>
+                {{ form.file(class_="form-control") }}<br>
+                {% for error in form.file.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Upload" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
 </body>
 </html>

@@ -3,50 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Document List</title>
-    <style>
-        .document-preview {
-            display: none;
-            margin-top: 20px;
-        }
-        .document-preview.active {
-            display: block;
-        }
-        iframe {
-            width: 100%;
-            height: 600px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/document_module/style.css') }}">
 </head>
 <body>
-    <h1>Document List</h1>
-    <ul>
-        {% if documents|length == 0 %}
-            <li>No documents found.</li>
-        {% else %}
-            {% for document in documents %}
-                <li>
-                    <a href="{{ url_for('documents.preview', document_id=document.id) }}">{{ document.title }}</a>
-                    - {{ document.description }}
-                    - Uploaded by: {{ document.uploader.email }}
-                    - {% if document.approved == True %}
-                        Approved
-                    {% else %}
-                        Not Approved
-                    {% endif %}
-                    {% if document.uploaded_by == current_user.id %}
-                        <a href="{{ url_for('documents.edit', document_id=document.id) }}">Edit</a>
-                        <form action="{{ url_for('documents.delete', document_id=document.id) }}" method="POST" style="display:inline;">
-                            <button type="submit">Delete</button>
-                        </form>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        {% endif %}
-    </ul>
-    <div class="document-preview {% if selected_document %}active{% endif %}">
-        {% if selected_document %}
-            <iframe id="preview-frame" src="{{ url_for('documents.serve_file', document_id=selected_document.id) }}"></iframe>
-        {% endif %}
+    <a href="{{ url_for('auth.logout') }}" class="logout-btn">Logout</a>
+    <div class="container">
+        <div class="document-list">
+            <h1>Document List</h1>
+            <a href="{{ url_for('documents.upload') }}" class="btn-upload">Upload Document</a>
+            <ul>
+                {% if documents|length == 0 %}
+                    <li>No documents found.</li>
+                {% else %}
+                    {% for document in documents %}
+                        <li>
+                            <a href="{{ url_for('documents.preview', document_id=document.id) }}">{{ document.title }}</a>
+                            - {{ document.description }}
+                            - Uploaded by: {{ document.uploader.email }}
+                            - {% if document.approved == True %}
+                                Approved
+                            {% else %}
+                                Not Approved
+                            {% endif %}
+                            {% if document.uploaded_by == current_user.id %}
+                                <a href="{{ url_for('documents.edit', document_id=document.id) }}" class="btn-edit">Edit</a>
+                                <form action="{{ url_for('documents.delete', document_id=document.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn-delete">Delete</button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+        <div class="document-preview {% if selected_document %}active{% endif %}">
+            {% if selected_document %}
+                <iframe id="preview-frame" src="{{ url_for('documents.serve_file', document_id=selected_document.id) }}"></iframe>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>

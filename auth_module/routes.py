@@ -11,14 +11,20 @@ auth_bp = Blueprint('auth', __name__, template_folder='templates')
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data)
+        email = form.email.data
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Correo ya existente', 'danger')
+            return render_template('auth/register.html', form=form)
+        user = User(email=email)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Registration successful. Please log in.', 'success')
+
+        flash('Registration successful. Please scan the QR code for 2FA.', 'success')
         login_user(user)  # Iniciar sesión automáticamente después del registro
-        return redirect(url_for('auth.qr_code'))
-    return render_template('auth/register.html', form=form)
+        return render_template('auth/register.html', form=form, qr_code_url=True)
+    return render_template('auth/register.html', form=form, qr_code_url=False)
 
 @auth_bp.route('/qr_code')
 @login_required
