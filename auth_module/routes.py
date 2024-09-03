@@ -16,14 +16,15 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Registration successful. Please log in.', 'success')
-        return redirect(url_for('auth.login'))
+        login_user(user)  # Iniciar sesión automáticamente después del registro
+        return redirect(url_for('auth.qr_code'))
     return render_template('auth/register.html', form=form)
 
 @auth_bp.route('/qr_code')
 @login_required
 def qr_code():
     user = current_user
-    url = pyotp.totp.TOTP(user.otp_secret).provisioning_uri(user.email, issuer_name="YourAppName")
+    url = user.get_totp_uri()
     img = qrcode.make(url)
     buf = BytesIO()
     img.save(buf)
