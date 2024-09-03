@@ -51,7 +51,7 @@ def verify_2fa():
         if current_user.verify_totp(form.otp.data):
             current_user.is_authenticated_2fa = True
             db.session.commit()
-            return redirect(url_for('main.dashboard'))
+            return redirect(url_for('documents.list'))
         else:
             flash('Invalid OTP', 'danger')
     return render_template('auth/verify_2fa.html', form=form)
@@ -59,5 +59,7 @@ def verify_2fa():
 @auth_bp.route('/logout')
 @login_required
 def logout():
+    current_user.is_authenticated_2fa = False
+    db.session.commit()
     logout_user()
     return redirect(url_for('auth.login'))

@@ -1,20 +1,7 @@
-from flask import Flask
-from flask_login import LoginManager
-from flask_mail import Mail
-from auth_module.models import User
-from auth_module.routes import auth_bp
+from flask import Blueprint
 
-app = Flask(__name__)
-app.config.from_object('config.Config')
+# Crear el Blueprint para el módulo de autenticación
+auth_bp = Blueprint('auth', __name__, template_folder='templates')
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'auth.login'
-
-mail = Mail(app)
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-app.register_blueprint(auth_bp)
+# Importar las rutas después de definir el Blueprint para evitar el ciclo
+from . import routes
