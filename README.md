@@ -23,10 +23,11 @@ pip install -r requirements.txt
 
 ## Uso
 
-1. Regístrate con un correo electrónico válido.
-2. Inicia sesión utilizando tu correo electrónico y contraseña.
-3. Configura la autenticación de doble factor (2FA) utilizando una aplicación de autenticación.
-4. Sube, edita, elimina y visualiza archivos PDF desde la interfaz de usuario.
+1. Accede a la página ingresando la siguiente dirección en tu navegador: http://127.0.0.1:5000/auth/login.
+2. Regístrate con un correo electrónico válido.
+3. Inicia sesión utilizando tu correo electrónico y contraseña.
+4. Configura la autenticación de doble factor (2FA) utilizando una aplicación de autenticación.
+5. Sube, edita, elimina y visualiza archivos PDF desde la interfaz de usuario.
 
 ## Pasos para Iniciar la Aplicación
 
