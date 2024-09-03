@@ -12,11 +12,30 @@ UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = {'pdf'}
 
 def allowed_file(filename):
+    """
+    Verifica si un archivo tiene una extensión permitida.
+
+    Entradas:
+    - filename (str): Nombre del archivo.
+
+    Salidas:
+    - bool: True si el archivo tiene una extensión permitida, False en caso contrario.
+    """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @document_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
+    """
+    Maneja la subida de nuevos documentos.
+
+    Entradas:
+    - Ninguna (obtiene datos del formulario de subida de documentos).
+
+    Salidas:
+    - Renderiza la plantilla de subida de documentos con el formulario.
+    - Redirige a la lista de documentos si la subida es exitosa.
+    """
     form = CreateDocumentForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -42,12 +61,31 @@ def upload():
 @document_bp.route('/list')
 @login_required
 def list():
+    """
+    Muestra la lista de documentos.
+
+    Entradas:
+    - Ninguna.
+
+    Salidas:
+    - Renderiza la plantilla de lista de documentos con los documentos del usuario.
+    """
     documents = Document.query.filter_by(uploaded_by=current_user.id).all()
     return render_template('documents/list.html', documents=documents)
 
 @document_bp.route('/edit/<int:document_id>', methods=['GET', 'POST'])
 @login_required
 def edit(document_id):
+    """
+    Maneja la edición de documentos existentes.
+
+    Entradas:
+    - document_id (int): ID del documento a editar.
+
+    Salidas:
+    - Renderiza la plantilla de edición de documentos con el formulario.
+    - Redirige a la lista de documentos si la edición es exitosa.
+    """
     document = Document.query.get_or_404(document_id)
     if document.uploaded_by != current_user.id:
         flash('You are not authorized to edit this document', 'danger')
@@ -67,6 +105,15 @@ def edit(document_id):
 @document_bp.route('/delete/<int:document_id>', methods=['POST'])
 @login_required
 def delete(document_id):
+    """
+    Maneja la eliminación de documentos existentes.
+
+    Entradas:
+    - document_id (int): ID del documento a eliminar.
+
+    Salidas:
+    - Redirige a la lista de documentos después de eliminar el documento.
+    """
     document = Document.query.get_or_404(document_id)
     if document.uploaded_by != current_user.id:
         flash('You are not authorized to delete this document', 'danger')
@@ -85,6 +132,15 @@ def delete(document_id):
 @document_bp.route('/preview/<int:document_id>', methods=['GET'])
 @login_required
 def preview(document_id):
+    """
+    Muestra una vista previa del documento.
+
+    Entradas:
+    - document_id (int): ID del documento a previsualizar.
+
+    Salidas:
+    - Renderiza la plantilla de vista previa del documento.
+    """
     document = Document.query.get_or_404(document_id)
     if document.uploaded_by != current_user.id:
         flash('You are not authorized to view this document', 'danger')
@@ -95,6 +151,15 @@ def preview(document_id):
 @document_bp.route('/serve_file/<int:document_id>')
 @login_required
 def serve_file(document_id):
+    """
+    Sirve el archivo del documento para su descarga o visualización.
+
+    Entradas:
+    - document_id (int): ID del documento cuyo archivo se va a servir.
+
+    Salidas:
+    - Respuesta de Flask para enviar el archivo.
+    """
     document = Document.query.get_or_404(document_id)
     filename = os.path.basename(document.file_path)
     return send_from_directory(directory=current_app.config['UPLOAD_FOLDER'], path=filename, as_attachment=False)

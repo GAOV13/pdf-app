@@ -21,6 +21,15 @@ mail = Mail(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Carga un usuario dado su ID.
+
+    Entradas:
+    - user_id (int): ID del usuario.
+
+    Salidas:
+    - User: Objeto de usuario correspondiente al ID.
+    """
     return User.query.get(int(user_id))
 
 # Registrar el blueprint de autenticación
