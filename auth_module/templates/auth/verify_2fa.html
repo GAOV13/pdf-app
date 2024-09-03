@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify 2FA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Two-Factor Authentication</h2>
+        <p>Please enter the 2FA token from your Google Authenticator app.</p>
+        <form method="POST" action="{{ url_for('auth.verify_2fa') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.token.label }}<br>
+                {{ form.token(size=32, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class_="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
